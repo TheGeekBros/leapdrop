@@ -14,4 +14,4 @@
         "scripts": ["eventPage.js"]
         , "persistent": false
     }
-, }
+}
