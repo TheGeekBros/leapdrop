@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>LeapDrop Popup Page</title>
+    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
+    <script src="popup.js"></script>
+    <style>
+        html,
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-content: center;
+            align-items: center;
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        body {
+            border-color: #EEE;
+            border-style: solid;
+            border-width: 2px;
+        }
+        
+        .heading {
+            font-size: 14px;
+        }
+        
+        .sub-heading {
+            font-size: 10px;
+            color: #444;
+        }
+        
+        .qr-code-container {
+            margin-top: 6px;
+            width: 128px;
+            height: 128px;
+            border-color: cornflowerblue;
+            border-style: solid;
+            border-width: 2px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="heading"> QR Code for this device </div>
+    <div class="qr-code-container"> </div> <span class="sub-heading">
+        LeapDrop 2016
+    </span>
+    <script src="js/popup.js"></script>
+</body>
+
+</html>

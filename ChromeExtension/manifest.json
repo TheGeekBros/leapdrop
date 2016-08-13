@@ -1,0 +1,17 @@
+{
+    "manifest_version": 2
+    , "name": "LeapDrop Extension"
+    , "description": "This extension will add basic functionality for Leap Drop."
+    , "version": "1.0"
+    , "browser_action": {
+        "default_icon": "favicon.png"
+            //, "default_popup": "popup.html"
+    }
+    , "permissions": [
+   "activeTab"
+   ]
+    , "background": {
+        "scripts": ["eventPage.js"]
+        , "persistent": false
+    }
+, }
