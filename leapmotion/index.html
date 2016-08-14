@@ -1,0 +1,78 @@
+<html>
+
+<head>
+    <!-- See more examples at developer.leapmotion.com -->
+    <base href="https://editor-leapmotion.netdna-ssl.com/leapmotion/javascript/20b2fdb2702ab28ae7d0becee04f52d7d2a68cab/v2/grab-strength/index.html.livegit?theme-id=4245&height=600" />
+    <title>Grab Strength Demo</title>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/three.js/r67/three.js"></script>
+    <script src="//js.leapmotion.com/leap-0.6.2.min.js"></script>
+    <script src="//js.leapmotion.com/leap-plugins-0.1.6.1.js"></script>
+    <script src="//js.leapmotion.com/leap.rigged-hand-0.1.4.min.js"></script>
+    <script type="text/javascript" src="socket.io.js"></script>
+    <style class="codepen">
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;
+        }
+        
+        #output {
+            font-size: 66px;
+            color: #005d98;
+            text-align: left;
+            position: fixed;
+            bottom: 18px;
+        }
+        
+        #progress {
+            background: #005d98;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            height: 16px;
+            width: 0%;
+        }
+        
+        img#connect-leap {
+            /* this can be removed with leapjs-plugins 0.1.4.1 */
+            max-width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id=output></div>
+    <div id=progress></div>
+</body>
+<script type="text/javascript">
+
+    var socket = io('http://localhost');
+    socket.emit('leapcontroller', {});
+
+    var grabbing = false;
+    /********************************************************
+     * This is the actual example part where we call grabStrength
+     *****************************************************/
+    var output = document.getElementById('output')
+        , progress = document.getElementById('progress');
+    // Set up the controller:
+    Leap.loop({
+        background: true
+    }, {
+        hand: function (hand) {
+            var strength = hand.grabStrength.toPrecision(2);
+            if (strength > .9 && !grabbing) {
+                grabbing = true;
+                console.log('GRAB');
+                socket.emit('grab', {});
+            }
+            else if (strength < 0.1 && grabbing) {
+                grabbing = false;
+                console.log('UNGRAB');
+                socket.emit('ungrab', {});
+            }
+            output.innerHTML = hand.grabStrength.toPrecision(2);
+            progress.style.width = hand.grabStrength * 100 + '%';
+        }
+    });
+</script>
+
+</html>

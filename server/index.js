@@ -1,3 +1,5 @@
+var helper = require('./helper.js');
+
 var _PORT = 8765;
 var _IP = 'localhost';
 
@@ -47,28 +49,96 @@ function handler (req, res) {
 app.listen(_PORT);
 
 var connections = [];
+var cameraSocket = undefined;
+var leapcontroller = undefined;
+var grabbing = false;
+var sourceSocket;
+var destinationSocket;
+var sourceURL = '';
+var destinationURL = '';
 
 io.on('connection', function (socket) {
-	connections.push(socket); // Add connection
-	console.log(socket.id + ' was connected!');
-
-	setTimeout(function () {
-
-		var id = socket.id;
-		id = id.replace('/#', '');
-		var url = 'http://' + _IP + ':' + _PORT + '/qr/' + id;
-
-		socket.emit('openTab', {url: url});
-	}, 3000);
-
-	setTimeout(function() {
-		console.log('Emitting takePicture..');
-		socket.emit('takePicture', {});
-	}, 5000);
 
 	socket.on('disconnect', function () {
 		console.log(socket.id + ' was disconnected!');
-		connections.pop(socket); // Remove connection
+		if (connections.indexOf(socket)) {
+			connections.pop(socket);
+		}
+	});
+
+	socket.on('iAmCamera', function () {
+		console.log(socket.id + ' was connected! [CAMERA]');
+		cameraSocket = socket;
+		connections.pop(cameraSocket);
+	});
+
+	socket.on('leapcontroller', function () {
+		console.log(socket.id + ' was connected! [LEAPCONTROLLER]');
+		leapcontroller = socket;
+		connections.pop(leapcontroller);
+	});
+
+	socket.on('client', function () {
+		connections.push(socket);
+		console.log(socket.id + ' was connected! [CLIENT]');
+	});
+
+	socket.on('grab', function () {
+		if (cameraSocket && !grabbing) {
+
+			setTimeout(function() {
+				cameraSocket.emit('source', {});
+			}, 300);
+
+			helper.openQRTabInAll(connections, _IP, _PORT);
+
+			grabbing = true;
+		} else {
+			console.log('Received "grab", but cameraSocket uninitialized.');
+		}
+	});
+
+	socket.on('ungrab', function () {
+		if (cameraSocket && grabbing) {
+			cameraSocket.emit('destination', {});
+			grabbing = false;
+		} else {
+			console.log('Received "ungrab", but cameraSocket uninitialized.');
+		}
+	});
+
+	socket.on('grabResponse', function (data) {
+		var id = data.id;
+		id = '/#' + id;
+		var _socket = helper.findSocket(connections, id);
+		if (!_socket) {
+			console.log('grabResponse: found socket is null');
+			return;
+		}
+		sourceSocket = _socket;
+		sourceSocket.emit('getURL', function () {
+			console.log('Emitting "getUrl"');
+		});
+	});
+
+	socket.on('gotURL', function (data) {
+		sourceURL = data.url;
+	});
+
+	socket.on('ungrabResponse', function (data) {
+		var id = data.id;
+		id = '/#' + id;
+		var _socket = helper.findSocket(connections, id);
+		if (!_socket) {
+			console.log('ungrabResponse: found socket is null');
+			return;
+		}
+		destinationSocket = _socket;
+		helper.closeQRTabInAll(connections, _IP, _PORT);
+
+		destinationSocket.emit('openURL', {
+			url: sourceURL
+		});
 	});
 });
 
