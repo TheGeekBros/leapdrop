@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<style type="text/css">
+		html, body {
+			height: 100%;
+			width: 100%;
+		}
+		body {
+			display: flex;
+			justify-content: center;
+			flex-direction: column;
+			align-content: center;
+		}
+	</style>
+</head>
+<body>
+<div id="qrcode" style="margin: 0 auto"></div>
+<script src="js/jquery.min.js"></script>
+<script src="js/qrcode.js"></script>
+<script type="text/javascript">
+	var qrcode = new QRCode("qrcode", {
+	    text: 'test',
+	    width: 500,
+	    height: 500,
+	    colorDark : "#000000",
+	    colorLight : "#ffffff",
+	    correctLevel : QRCode.CorrectLevel.H
+	});
+</script>
+</body>
+</html>

@@ -8,10 +8,9 @@
             //, "default_popup": "popup.html"
     }
     , "permissions": [
-   "activeTab"
-   ]
+        "activeTab", "tabs"
+    ]
     , "background": {
-        "scripts": ["eventPage.js"]
-        , "persistent": false
+        "scripts": [ "js/socket.io.js", "js/background.js"]
     }
 }
