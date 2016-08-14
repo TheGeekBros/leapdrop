@@ -38,6 +38,9 @@
 </head>
 
 <body>
+
+    <button style="height: 100px; width: 100px; position: absolute" id="start">START</button>
+
     <div id=output></div>
     <div id=progress></div>
 </body>
@@ -53,25 +56,29 @@
     var output = document.getElementById('output')
         , progress = document.getElementById('progress');
     // Set up the controller:
-    Leap.loop({
-        background: true
-    }, {
-        hand: function (hand) {
-            var strength = hand.grabStrength.toPrecision(2);
-            if (strength > .9 && !grabbing) {
-                grabbing = true;
-                console.log('GRAB');
-                socket.emit('grab', {});
+
+    var start = document.getElementById('start');
+    start.addEventListener('click', function (e) {
+        Leap.loop({
+            background: true
+        }, {
+            hand: function (hand) {
+                var strength = hand.grabStrength.toPrecision(2);
+                if (strength > .9 && !grabbing) {
+                    grabbing = true;
+                    console.log('GRAB');
+                    socket.emit('grab', {});
+                }
+                else if (strength < 0.1 && grabbing) {
+                    grabbing = false;
+                    console.log('UNGRAB');
+                    socket.emit('ungrab', {});
+                }
+                output.innerHTML = hand.grabStrength.toPrecision(2);
+                progress.style.width = hand.grabStrength * 100 + '%';
             }
-            else if (strength < 0.1 && grabbing) {
-                grabbing = false;
-                console.log('UNGRAB');
-                socket.emit('ungrab', {});
-            }
-            output.innerHTML = hand.grabStrength.toPrecision(2);
-            progress.style.width = hand.grabStrength * 100 + '%';
-        }
-    });
+        });
+    }, false);
 </script>
 
 </html>
