@@ -1,7 +1,6 @@
-// ??
-console.log('Test');
-
 var socket = io('http://localhost:8765');
+
+console.log('Emitting "client"..');
 socket.emit('client', {});
 
 var qrTab = null;
@@ -54,10 +53,17 @@ socket.on('openURL', function (data) {
 });
 
 socket.on('getURL', function (data) {
-	chrome.tabs.getSelected(null, function (tab) {
-		var url = tab.url;
-		socket.emit('gotURL', {
-			data: url
-		});
+	// chrome.tabs.getSelected(null, function (tab) {
+	// 	var url = tab.url;
+	// 	console.log('Emitting "gotURL" with ' + url);
+	// 	socket.emit('gotURL', {
+	// 		data: url
+	// 	});
+	// });
+	var url = activeTab.url;
+	console.log(activeTab);
+	console.log('Emitting "gotURL" with ' + url);
+	socket.emit('gotURL', {
+		url: url
 	});
 });

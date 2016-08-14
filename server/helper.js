@@ -8,8 +8,9 @@ module.exports = {
 	},
 
 	openQRTabInAll: function (connections, IP, PORT) {
+		console.log('Opening QRTab in ' + connections.length + ' computers..');
 		for (var i = 0; i < connections.length; i++) {
-			openQRTab(connections[i], IP, PORT);
+			this.openQRTab(connections[i], IP, PORT);
 		}
 	},
 
@@ -20,17 +21,28 @@ module.exports = {
 		}
 	},
 
-	test: function () {
-		console.log('TEST');
-	},
-
 	findSocket: function (connections, id) {
 		console.log('Searching for socket with id ' + id);
 		for (var i = 0; i < connections.length; i++) {
 			var socket = connections[i];
+			console.log('Comparing ' + id + ' with ' + socket.id);
 			if (socket.id == id) return socket;
 		}
 		return null;
+	},
+
+	popSocket: function (connections, id) {
+		var index = -1;
+		for (var i = 0; i < connections.length; i++) {
+			if (connections[i].id == id) {
+				index = i;
+				break;
+			}
+		}
+		if (index < 0) return connections;
+		
+		connections.splice(index);
+		return connections;
 	}
 
 };

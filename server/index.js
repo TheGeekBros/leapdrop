@@ -61,34 +61,34 @@ io.on('connection', function (socket) {
 
 	socket.on('disconnect', function () {
 		console.log(socket.id + ' was disconnected!');
-		if (connections.indexOf(socket)) {
-			connections.pop(socket);
-		}
+		connects = helper.popSocket(connections, socket.id);
 	});
 
 	socket.on('iAmCamera', function () {
 		console.log(socket.id + ' was connected! [CAMERA]');
 		cameraSocket = socket;
-		connections.pop(cameraSocket);
 	});
 
 	socket.on('leapcontroller', function () {
 		console.log(socket.id + ' was connected! [LEAPCONTROLLER]');
 		leapcontroller = socket;
-		connections.pop(leapcontroller);
 	});
 
 	socket.on('client', function () {
+		console.log('Got a client!');
 		connections.push(socket);
+		console.log(connections.length);
 		console.log(socket.id + ' was connected! [CLIENT]');
+		console.log(connections.length);
 	});
 
 	socket.on('grab', function () {
+		console.log('Received "grab"');
 		if (cameraSocket && !grabbing) {
-
+			console.log("Will emit to phone..");
 			setTimeout(function() {
 				cameraSocket.emit('source', {});
-			}, 300);
+			}, 3000);
 
 			helper.openQRTabInAll(connections, _IP, _PORT);
 
@@ -99,7 +99,9 @@ io.on('connection', function (socket) {
 	});
 
 	socket.on('ungrab', function () {
+		console.log('Received "ungrab"');
 		if (cameraSocket && grabbing) {
+			console.log('Emitting "destination"..');
 			cameraSocket.emit('destination', {});
 			grabbing = false;
 		} else {
@@ -109,8 +111,7 @@ io.on('connection', function (socket) {
 
 	socket.on('grabResponse', function (data) {
 		console.log(data);
-		return;
-		var id = data.id;
+		var id = data;
 		id = '/#' + id;
 		var _socket = helper.findSocket(connections, id);
 		if (!_socket) {
@@ -118,17 +119,19 @@ io.on('connection', function (socket) {
 			return;
 		}
 		sourceSocket = _socket;
-		sourceSocket.emit('getURL', function () {
-			console.log('Emitting "getUrl"');
-		});
+		console.log('Emitting "getUrl"');
+		sourceSocket.emit('getURL', {});
 	});
 
 	socket.on('gotURL', function (data) {
 		sourceURL = data.url;
+		console.log('Yo bro, got url! ' + sourceURL);
 	});
 
 	socket.on('ungrabResponse', function (data) {
-		var id = data.id;
+		console.log('ungrabResponse');
+		console.log(data);
+		var id = data;
 		id = '/#' + id;
 		var _socket = helper.findSocket(connections, id);
 		if (!_socket) {
@@ -142,6 +145,8 @@ io.on('connection', function (socket) {
 			url: sourceURL
 		});
 	});
+
+	console.log(connections.length);
 });
 
 console.log('Server started..');

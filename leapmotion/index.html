@@ -2,12 +2,11 @@
 
 <head>
     <!-- See more examples at developer.leapmotion.com -->
-    <base href="https://editor-leapmotion.netdna-ssl.com/leapmotion/javascript/20b2fdb2702ab28ae7d0becee04f52d7d2a68cab/v2/grab-strength/index.html.livegit?theme-id=4245&height=600" />
     <title>Grab Strength Demo</title>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/three.js/r67/three.js"></script>
-    <script src="//js.leapmotion.com/leap-0.6.2.min.js"></script>
-    <script src="//js.leapmotion.com/leap-plugins-0.1.6.1.js"></script>
-    <script src="//js.leapmotion.com/leap.rigged-hand-0.1.4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r67/three.js"></script>
+    <script src="https://js.leapmotion.com/leap-0.6.2.min.js"></script>
+    <script src="https://js.leapmotion.com/leap-plugins-0.1.6.1.js"></script>
+    <script src="https://js.leapmotion.com/leap.rigged-hand-0.1.4.min.js"></script>
     <script type="text/javascript" src="socket.io.js"></script>
     <style class="codepen">
         body {
@@ -44,7 +43,7 @@
 </body>
 <script type="text/javascript">
 
-    var socket = io('http://localhost');
+    var socket = io('http://localhost:8765');
     socket.emit('leapcontroller', {});
 
     var grabbing = false;
