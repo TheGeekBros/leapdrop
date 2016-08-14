@@ -108,6 +108,8 @@ io.on('connection', function (socket) {
 	});
 
 	socket.on('grabResponse', function (data) {
+		console.log(data);
+		return;
 		var id = data.id;
 		id = '/#' + id;
 		var _socket = helper.findSocket(connections, id);
