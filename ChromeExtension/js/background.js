@@ -3,6 +3,8 @@ var _PORT = '8765';
 
 var socket = io('http://' + _IP + ':' + _PORT);
 
+var opened = false;
+
 console.log('Emitting "client"..');
 socket.emit('client', {});
 
@@ -19,23 +21,29 @@ socket.on('openTab', function (data) {
 		console.log(activeTab);
 	});
 
-	chrome.tabs.create({
-		url: url,
-		active: true
-	}, function (tab) {
-		qrTab = tab;
-		console.log(qrTab);
-		var id = qrTab.id;
-		chrome.tabs.onRemoved.addListener(function (id, removeInfo) {
-			if (removeInfo.isWindowClosing) {
-				return;
-			}
+	if (!opened) {
+		chrome.tabs.create({
+			url: url,
+			active: true
+		}, function (tab) {
+			qrTab = tab;
+			console.log(qrTab);
+			var id = qrTab.id;
+			chrome.tabs.onRemoved.addListener(function (id, removeInfo) {
 
-			chrome.tabs.update(activeTab.id, {active: true}, function (activeTabParam) {
-				return;
+				opened = false;
+
+				if (removeInfo.isWindowClosing) {
+					return;
+				}
+
+				chrome.tabs.update(activeTab.id, {active: true}, function (activeTabParam) {
+					return;
+				});
 			});
 		});
-	});
+	} 
+
 });
 
 socket.on('closeQRTab', function () {
