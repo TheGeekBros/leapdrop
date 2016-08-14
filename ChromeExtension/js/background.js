@@ -1,4 +1,7 @@
-var _IP = '172.23.0.179';
+// var _IP = '172.23.0.245';
+// var _IP = '192.168.43.156';
+// var _IP = '192.168.49.1';
+var _IP = '128.199.69.60';
 var _PORT = '8765';
 
 var socket = io('http://' + _IP + ':' + _PORT);
@@ -28,6 +31,7 @@ socket.on('openTab', function (data) {
 		}, function (tab) {
 			qrTab = tab;
 			console.log(qrTab);
+			opened = true;
 			var id = qrTab.id;
 			chrome.tabs.onRemoved.addListener(function (id, removeInfo) {
 
@@ -60,6 +64,8 @@ socket.on('openURL', function (data) {
 		active: true
 	}, function (tab) {
 		console.log('Opened ' + url);
+		var id = tab.id;
+		console.log('ID of opened tab: ' + id);
 	});
 });
 

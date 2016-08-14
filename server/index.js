@@ -1,7 +1,8 @@
 var helper = require('./helper.js');
 
 var _PORT = 8765;
-var _IP = '172.23.0.179';
+// var _IP = '172.23.0.179';
+var _IP = '128.199.69.60';
 
 var app = require('http').createServer(handler);
 var io = require('socket.io')(app);
@@ -141,9 +142,12 @@ io.on('connection', function (socket) {
 		destinationSocket = _socket;
 		helper.closeQRTabInAll(connections, _IP, _PORT);
 
-		destinationSocket.emit('openURL', {
-			url: sourceURL
-		});
+		setTimeout(function () {
+
+		})
+			destinationSocket.emit('openURL', {
+				url: sourceURL
+			});
 	});
 
 	console.log(connections.length);
