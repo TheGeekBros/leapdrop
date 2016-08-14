@@ -1,4 +1,7 @@
-var socket = io('http://localhost:8765');
+var _IP = '172.23.0.179';
+var _PORT = '8765';
+
+var socket = io('http://' + _IP + ':' + _PORT);
 
 console.log('Emitting "client"..');
 socket.emit('client', {});
