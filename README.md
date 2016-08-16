@@ -4,6 +4,6 @@
 
 ## LeapDrop was developed at InOut 3.0 Hackathon, organized at SVNIT Surat on 13th and 14th August, 2016.
 
-## LeapDrop is develoepd by [Umang Galaiya](http://umanggalaiya.in/), [Siddharth Goswami](http://siddharth.xyz/), and [Soham Dodia](http://sohamdodia.tk)
+## LeapDrop is developed by [Umang Galaiya](http://umanggalaiya.in/), [Siddharth Goswami](http://siddharth.xyz/), and [Soham Dodia](http://sohamdodia.tk)
 
 ## [Here's a video of LeapDrop in action](https://www.youtube.com/watch?v=ptT3npbsaRg)
